@@ -1,0 +1,32 @@
+body {
+    font-style: italic;
+}
+
+div {
+    width: auto;
+    border: 25px solid #ffffe6;
+    padding: 25px;
+    margin: 25px;
+}
+
+table {
+    background-color: white;
+    color: #669;
+    margin: 20px auto;
+    width: 700px;
+    border-collapse: collapse;
+}
+
+td{
+    text-align: center;
+    padding: 0;
+    line-height: 5px;
+}
+
+tr#exceed {
+    color: crimson;
+}
+
+tr#non-exceed {
+    color: forestgreen;
+}
