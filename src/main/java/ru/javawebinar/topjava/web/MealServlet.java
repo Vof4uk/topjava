@@ -41,14 +41,11 @@ public class MealServlet extends HttpServlet{
         String op = req.getParameter("operation");
 
         if(op.equals("create")) {
-            int minutes = Integer.parseInt(req.getParameter("minutes"));
-            int day = Integer.parseInt(req.getParameter("day"));
-            int month = Integer.parseInt(req.getParameter("month"));
-            int year = Integer.parseInt(req.getParameter("year"));
+
+            String timestamp = req.getParameter("timestamp");
             String mealName = req.getParameter("meal");
             Integer calories = Integer.parseInt(req.getParameter("calories"));
-            Meal meal = new Meal(LocalDateTime.of(LocalDate.of(year, month, day),
-                    LocalTime.of(minutes / 60, minutes % 60)), mealName, calories);
+            Meal meal = new Meal(LocalDateTime.parse(timestamp), mealName, calories);
 
             mealService.createMeal(meal);
         }
