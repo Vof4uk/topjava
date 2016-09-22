@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +37,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<User> getAll() {
-        return repository.getAll();
+        List<User> users = new ArrayList<>();
+        users.addAll(repository.getAll());
+        return users;
     }
 
     public void update(User user) {

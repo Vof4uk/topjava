@@ -21,4 +21,14 @@ public class UserServlet extends HttpServlet {
         LOG.debug("forward to userList");
         request.getRequestDispatcher("/userList.jsp").forward(request, response);
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        LOG.debug("");
+        String action = req.getParameter("action");
+        if("userList".equals(action)){
+
+        }
+    }
+
 }

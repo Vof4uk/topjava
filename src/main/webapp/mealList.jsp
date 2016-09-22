@@ -16,11 +16,22 @@
     </style>
 </head>
 <body>
+<%@ include file="userLogIn.jsp" %>
 <section>
     <h2><a href="index.html">Home</a></h2>
     <h3>Meal list</h3>
     <a href="meals?action=create">Add Meal</a>
     <hr>
+    <form action="meals" method="get">
+        <input type="hidden" name="action" value="filter_by_date">
+        <input type="date" name="fromDate">
+        <input type="date" name="toDate"><br>
+
+        <input type="time" name="fromTime">
+        <input type="time" name="toTime">
+
+        <input type="submit" name="Filter" value="Filter">
+    </form>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
@@ -32,7 +43,7 @@
         </tr>
         </thead>
         <c:forEach items="${mealList}" var="meal">
-            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
             <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
