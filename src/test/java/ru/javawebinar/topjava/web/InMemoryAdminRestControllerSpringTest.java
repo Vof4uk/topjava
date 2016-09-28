@@ -2,14 +2,18 @@ package ru.javawebinar.topjava.web;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
@@ -22,7 +26,9 @@ import static ru.javawebinar.topjava.UserTestData.USER;
  * GKislin
  * 13.03.2015.
  */
-@ContextConfiguration("classpath:spring/spring-app.xml")
+@ContextConfiguration(classes = {ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl.class,
+                                ru.javawebinar.topjava.service.UserServiceImpl.class,
+                                ru.javawebinar.topjava.web.user.AdminRestController.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class InMemoryAdminRestControllerSpringTest {
 
@@ -34,6 +40,7 @@ public class InMemoryAdminRestControllerSpringTest {
 
     @Before
     public void setUp() throws Exception {
+
         repository.getAll().forEach(u -> repository.delete(u.getId()));
         repository.save(USER);
         repository.save(ADMIN);

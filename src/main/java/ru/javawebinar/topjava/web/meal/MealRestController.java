@@ -13,6 +13,8 @@ import ru.javawebinar.topjava.util.TimeUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -22,6 +24,12 @@ import java.util.List;
 @Controller
 public class MealRestController {
     private static final Logger LOG = LoggerFactory.getLogger(MealRestController.class);
+
+    private static Comparator<MealWithExceed> comparator;
+
+    static {
+        comparator = (mw1, mw2) -> mw2.getDateTime().compareTo(mw1.getDateTime());
+    }
 
     @Autowired
     private MealService service;
@@ -41,7 +49,9 @@ public class MealRestController {
     public List<MealWithExceed> getAll() {
         int userId = AuthorizedUser.id();
         LOG.info("getAll for User {}", userId);
-        return MealsUtil.getWithExceeded(service.getAll(userId), AuthorizedUser.getCaloriesPerDay());
+        List<MealWithExceed> list = MealsUtil.getWithExceeded(service.getAll(userId), AuthorizedUser.getCaloriesPerDay());
+        Collections.sort(list, comparator);
+        return list;
     }
 
     public void update(Meal meal, int id) {
@@ -62,11 +72,13 @@ public class MealRestController {
         int userId = AuthorizedUser.id();
         LOG.info("getBetween dates {} - {} for time {} - {} for User {}", startDate, endDate, startTime, endTime, userId);
 
-        return MealsUtil.getFilteredWithExceeded(
+         List<MealWithExceed> list = MealsUtil.getFilteredWithExceeded(
                 service.getBetweenDates(startDate != null ? startDate : TimeUtil.MIN_DATE, endDate != null ? endDate : TimeUtil.MAX_DATE, userId),
                 startTime != null ? startTime : LocalTime.MIN,
                 endTime != null ? endTime : LocalTime.MAX,
                 AuthorizedUser.getCaloriesPerDay()
         );
+        Collections.sort(list, comparator);
+        return list;
     }
 }
