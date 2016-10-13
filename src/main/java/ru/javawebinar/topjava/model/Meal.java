@@ -1,5 +1,9 @@
 package ru.javawebinar.topjava.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import java.lang.annotation.Target;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -8,14 +12,27 @@ import java.time.LocalTime;
  * GKislin
  * 11.01.2015.
  */
+@Entity
+@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = "date_time" , name = "meals_unique_user_datetime_idx")})
 public class Meal extends BaseEntity {
-    private Integer id;
 
-    private final LocalDateTime dateTime;
+    @Column(name = "date_time", nullable = false, unique = true)
+    @NotEmpty
+    private LocalDateTime dateTime;
 
-    private final String description;
+    @Column(name = "description")
+    private String description;
 
-    private final int calories;
+    @Column(name = "calories")
+    @NotEmpty
+    private int calories;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", table = "users", nullable = false)
+    private User user;
+
+    public Meal() {
+    }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this(null, dateTime, description, calories);
@@ -46,6 +63,26 @@ public class Meal extends BaseEntity {
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
