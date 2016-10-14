@@ -3,6 +3,8 @@ package ru.javawebinar.topjava.model;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import java.lang.annotation.Target;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,23 +14,27 @@ import java.time.LocalTime;
  * GKislin
  * 11.01.2015.
  */
+@NamedQueries({
+    @NamedQuery(name = Meal.GET_ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id =:userId ORDER BY m.dateTime DESC")
+})
 @Entity
-@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = "date_time" , name = "meals_unique_user_datetime_idx")})
+@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"date_time", "user_id"} , name = "meals_unique_user_datetime_idx")})
 public class Meal extends BaseEntity {
 
-    @Column(name = "date_time", nullable = false, unique = true)
-    @NotEmpty
+    public static final String GET_ALL_SORTED = "Meal.getAllSorted";
+
+    @Column(name = "date_time", unique = true, nullable = false)
     private LocalDateTime dateTime;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "calories")
-    @NotEmpty
+    @Column(name = "calories", nullable = false)
+    @Digits(fraction = 0, integer = 4)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", table = "users", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {
