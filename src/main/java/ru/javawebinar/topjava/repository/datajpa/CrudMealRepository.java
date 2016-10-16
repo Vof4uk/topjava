@@ -8,5 +8,4 @@ import ru.javawebinar.topjava.model.Meal;
  * 02.10.2016
  */
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
-
 }
